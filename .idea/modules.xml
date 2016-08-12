@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/bravia-master.iml" filepath="$PROJECT_DIR$/.idea/bravia-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/display-node.iml" filepath="$PROJECT_DIR$/.idea/display-node.iml" />
     </modules>
   </component>
 </project>

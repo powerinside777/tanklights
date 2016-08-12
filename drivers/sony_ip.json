@@ -13,6 +13,7 @@
   "STATUS_INPUT":"EINPT################",
   "STATUS_POWER":"EPOWR################",
   "STATUS_LAMP":"none",
+  "STATUS_LAMP2":"",
   "RSP_ON":"*SAPOWR0000000000000001",
   "RSP_OFF":"*SAPOWR0000000000000000",
   "RSP_HDMI1":"*SAINPT0000000100000001",
@@ -22,5 +23,6 @@
   "RSP_VGA1":"none",
   "RSP_DVI":"none",
   "RSP_SLOT":"none",
-  "RSP_LAMP":"none"
+  "RSP_LAMP":"none",
+  "RSP_LAMP2":""
 }

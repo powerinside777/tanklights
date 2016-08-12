@@ -2,14 +2,17 @@
   "name": "display-node",
   "version": "1.0.0",
   "description": "Control Displays",
-  "main": "index.js",
+  "main": "device.js",
   "dependencies": {
     "formidable": "^1.0.17",
     "net": "^1.0.2",
     "mqtt": "latest"
   },
-  "devDependencies": {},
+  "devDependencies": {
+
+  },
   "scripts": {
+    "start": "node device.js"
 
   },
   "author": "Joshua Hodgetts",

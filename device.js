@@ -4,13 +4,25 @@ var ID =  process.env.DEVICE_ID
 var PORT = process.env.DEVICE_PORT;
 var DRIVER =   process.env.DRIVER_NAME
 var MQTT_HOST = process.env.MQTT_BROKER;
-var mqtt_client  = mqtt.connect();
+var MQTT_BROKER_USER = process.env.MQTT_BROKER_USER;
+var MQTT_BROKER_PASS = process.env.MQTT_BROKER_PASS;
+
 var DISPLAY = require('./lib');
+
 var Commands = require("./drivers/"+DRIVER+".json");
 exports.Commands = Commands;
 
+
+
+var settings = {
+    username:MQTT_BROKER_USER,
+    password:MQTT_BROKER_PASS
+}
+
+var mqtt_client  = mqtt.connect(MQTT_HOST,settings);
 mqtt_client.on('connect', function () {
     mqtt_client.subscribe('room/display/'+ID+'/power');
+    console.log('MQTT:','connected');
 });
 
 

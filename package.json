@@ -1,6 +1,6 @@
 {
   "name": "display-node",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Control Displays",
   "main": "device.js",
   "dependencies": {
@@ -8,9 +8,7 @@
     "net": "^1.0.2",
     "mqtt": "latest"
   },
-  "devDependencies": {
 
-  },
   "scripts": {
     "start": "node device.js"
 

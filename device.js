@@ -9,8 +9,15 @@ var MQTT_BROKER_PASS = process.env.MQTT_BROKER_PASS;
 
 var DISPLAY = require('./lib');
 
-var Commands = require("./drivers/"+DRIVER+".json");
-exports.Commands = Commands;
+try{
+    var Commands = require("./drivers/"+DRIVER+".json");
+}
+catch (err){
+    Commands =  require("./drivers/sony_ip.json");
+    console.log('Driver error:','using default');
+}
+
+
 
 
 
@@ -34,7 +41,7 @@ var display = new DISPLAY.Displayclass(DEVICE,PORT,Commands, function(client) {
     mqtt_client.on('message', function (topic, message) {
         console.log('MQTT:'+topic+':'+message.toString());
         if(topic == 'room/display/'+ID+'/power'){
-            
+
             if(message.toString() == 'on'){
                 client.exec(Commands.CMD_ON)
             }

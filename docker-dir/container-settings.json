@@ -1,3 +1,0 @@
-"HostConfig": {
-"PortBindings":{ "1025/tcp": [{ "HostIp": "0.0.0.0", "HostPort": "1025" }] }
-}

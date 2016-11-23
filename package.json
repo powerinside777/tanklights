@@ -1,12 +1,13 @@
 {
-  "name": "display-node",
-  "version": "1.2.0",
-  "description": "Control Displays",
+  "name": "Fish_tank_lights",
+  "version": "0.1.0",
+  "description": "Fish_tank_lights",
   "main": "device.js",
   "dependencies": {
-    "formidable": "^1.0.17",
-    "net": "^1.0.2",
-    "mqtt": "latest"
+    "request": "",
+    "node-schedule": "",
+    "mqtt": "",
+    "mongoose":""
   },
 
   "scripts": {
@@ -14,5 +15,5 @@
 
   },
   "author": "Joshua Hodgetts",
-  "license": "jjh1"
+  "license": "MIT"
 }

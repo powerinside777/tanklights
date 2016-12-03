@@ -12,17 +12,48 @@ var tempport2;
 var tempport3;
 var tempport4;
 var Light       		= require('./models/lights');
+var db = mongoose.connection;
 
+var lastReconnectAttempt;
 var settings = {
     username:MQTT_BROKER_USER,
     password:MQTT_BROKER_PASS
 }
 
-mongoose.connect(configDB.url, function(err) {
-    if (err) {
-       throw err;
+mongoose.connect(configDB.url,{server:{auto_reconnect:true}},function(err) {
+    if (err)
+        return console.error(err);
 
+}); // connect to our database
+db.on('error', function(error) {
+    console.error('Error in MongoDb connection: ' + error);
+    mongoose.disconnect();
+});
+db.on('disconnected', function() {
+    console.log('MongoDB disconnected!');
+    var now = new Date().getTime();
+    // check if the last reconnection attempt was too early
+    if (lastReconnectAttempt && now-lastReconnectAttempt<5000) {
+        // if it does, delay the next attempt
+        var delay = 5000-(now-lastReconnectAttempt);
+        console.log('reconnecting to MongoDB in ' + delay + "mills");
+        setTimeout(function() {
+            console.log('reconnecting to MongoDB');
+            lastReconnectAttempt=new Date().getTime();
+            mongoose.connect(configDB.url, {server:{auto_reconnect:true}});
+        },delay);
     }
+    else {
+        console.log('reconnecting to MongoDB');
+        lastReconnectAttempt=now;
+        mongoose.connect(configDB.url, {server:{auto_reconnect:true}});
+    }
+
+});
+db.on('connected', function() {
+    updatetimes();
+    console.log('conected');
+
 });
 var mqtt_client  = mqtt.connect(MQTT_HOST,settings);
 mqtt_client.on('connect', function () {
@@ -185,10 +216,12 @@ function dolights(state,id){
                 console.dir(body)
                 if (body == "Success!") {
                     mqtt_client.publish("home", id + '=' + state);
+
                 }
             })
 
     });
+
 
 }
 
@@ -203,6 +236,7 @@ function updatetimes(){
         if (!light)
             return;
 
+            console.log("Lighting update complete")
         tempport1 = light.Lights.port
         light_1.dayOfWeek = [0, new schedule.Range(0, 6)];
         light_1.hour = parseInt(light.Lights.ontimehr)
@@ -221,12 +255,12 @@ function updatetimes(){
     });
     Light.findOne({ 'Lights.id' :  'Lights 2' }, function(err, light) {
         if (err)
-            return ;
+            console.log(err) ; return ;
 
         // if no user is found, return the message
         if (!light)
             return;
-
+        console.log("found lihgts 2")
         tempport2 = light.Lights.port
         light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
         light_2.hour = parseInt(light.Lights.ontimehr)
@@ -324,4 +358,3 @@ var light4on = schedule.scheduleJob(light_1, function(){
 var light4off = schedule.scheduleJob(light_2, function(){
     dolights(0,'Lights 4')
 });
-updatetimes();

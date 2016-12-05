@@ -7,13 +7,13 @@ var MQTT_BROKER_USER = 'josh';
 var MQTT_BROKER_PASS = 'Isabella2030';
 var mongoose = require('mongoose');
 var configDB = require('./models/database.js');
-var tempport1;
-var tempport2;
-var tempport3;
-var tempport4;
+var tempport1 =""
+var tempport2 =""
+var tempport3 =""
+var tempport4=""
 var Light       		= require('./models/lights');
 var db = mongoose.connection;
-
+mongoose.Promise = require('q').Promise
 var lastReconnectAttempt;
 var settings = {
     username:MQTT_BROKER_USER,
@@ -111,17 +111,18 @@ function dolights(state,id){
         'content-type': 'text/plain',
         'accepT': '*/*'
     }
+    console.log(tempport2)
     switch(id){
-        case "Light 1":
+        case "Lights 1":
             port = tempport1;
             break;
-        case "Light 2":
+        case "Lights 2":
             port = tempport2;
             break;
-        case "Light 3":
+        case "Lights 3":
             port = tempport3;
             break;
-        case "Light 4":
+        case "Lights 4":
             port = tempport4;
             break;
 
@@ -209,20 +210,23 @@ function dolights(state,id){
                 }
             }
 
+if(port !="") {
 
-            request(options, function (err, res, body) {
-                if (err) {
-                    console.dir(err)
-                    return
-                }
-                console.dir('headers', res.headers)
-                console.dir('status code', res.statusCode)
-                console.dir(body)
-                if (body == "Success!") {
-                    mqtt_client.publish("home", id + '=' + state);
 
-                }
-            })
+    request(options, function (err, res, body) {
+        if (err) {
+            console.dir(err)
+            return
+        }
+        console.dir('headers', res.headers)
+        console.dir('status code', res.statusCode)
+        console.dir(body)
+        if (body == "Success!") {
+            mqtt_client.publish("home", id + '=' + state);
+
+        }
+    })
+}
 
 
 
@@ -231,16 +235,20 @@ function dolights(state,id){
 
 
 function updatetimes(){
+    var promises = [
+
 
     Light.findOne({ 'Lights.id' :  'Lights 1' }, function(err, light) {
-        if (err)
-            return ;
+        if (err) {
+            console.log(err);
+            return;
+        }
 
         // if no user is found, return the message
         if (!light)
             return;
 
-            console.log("Lighting update complete")
+        console.log("found lihgts 1")
         tempport1 = light.Lights.port
         light_1.dayOfWeek = [0, new schedule.Range(0, 6)];
         light_1.hour = parseInt(light.Lights.ontimehr)
@@ -256,79 +264,93 @@ function updatetimes(){
             dolights(0,tempport1)
         })
 
-    });
-    Light.findOne({ 'Lights.id' :  'Lights 2' }, function(err, light) {
-        if (err)
-            console.log(err) ; return ;
+    }).exec(),
+        Light.findOne({ 'Lights.id' :  'Lights 2' }, function(err, light) {
 
-        // if no user is found, return the message
-        if (!light)
-            return;
-        console.log("found lihgts 2")
-        tempport2 = light.Lights.port
-        light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
-        light_2.hour = parseInt(light.Lights.ontimehr)
-        light_2.minute = parseInt(light.Lights.ontimemin)
+            if (err) {
+                console.log(err);
+                return;
+            }
 
-        light2on.reschedule(light_2, function(){
-            dolights(1,tempport2)
-        });
-        light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
-        light_2.hour = parseInt(light.Lights.offtimehr)
-        light_2.minute = parseInt(light.Lights.offtimemin)
-        light2off.reschedule(light_2, function(){
-            dolights(0,tempport2)
-        })
+            // if no user is found, return the message
 
-    });
-    Light.findOne({ 'Lights.id' :  'Lights 3' }, function(err, light) {
-        if (err)
-            return ;
+            if (!light)
+                return;
 
-        // if no user is found, return the message
-        if (!light)
-            return;
+            console.log("found lihgts 2")
+            tempport2 = light.Lights.port
+            light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_2.hour = parseInt(light.Lights.ontimehr)
+            light_2.minute = parseInt(light.Lights.ontimemin)
 
-        tempport3 = light.Lights.port
-        light_3.dayOfWeek = [0, new schedule.Range(0, 6)];
-        light_3.hour = parseInt(light.Lights.ontimehr)
-        light_3.minute = parseInt(light.Lights.ontimemin)
+            light2on.reschedule(light_2, function(){
+                dolights(1,tempport2)
+            });
+            light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_2.hour = parseInt(light.Lights.offtimehr)
+            light_2.minute = parseInt(light.Lights.offtimemin)
+            light2off.reschedule(light_2, function(){
+                dolights(0,tempport2)
+            })
 
-        light3on.reschedule(light_3, function(){
-            dolights(1,tempport3)
-        });
-        light_3.dayOfWeek = [0, new schedule.Range(0, 6)];
-        light_3.hour = parseInt(light.Lights.offtimehr)
-        light_3.minute = parseInt(light.Lights.offtimemin)
-        light3off.reschedule(light_3, function(){
-            dolights(0,tempport3)
-        })
+        }).exec(),
+        Light.findOne({ 'Lights.id' :  'Lights 3' }, function(err, light) {
+            if (err) {
+                console.log(err);
+                return;
+            }
 
-    });
-    Light.findOne({ 'Lights.id' :  'Lights 4' }, function(err, light) {
-        if (err)
-            return ;
+            // if no user is found, return the message
+            if (!light)
+                return;
+            console.log("found lihgts 3")
+            tempport3 = light.Lights.port
+            light_3.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_3.hour = parseInt(light.Lights.ontimehr)
+            light_3.minute = parseInt(light.Lights.ontimemin)
 
-        // if no user is found, return the message
-        if (!light)
-            return;
+            light3on.reschedule(light_3, function(){
+                dolights(1,tempport3)
+            });
+            light_3.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_3.hour = parseInt(light.Lights.offtimehr)
+            light_3.minute = parseInt(light.Lights.offtimemin)
+            light3off.reschedule(light_3, function(){
+                dolights(0,tempport3)
+            })
 
-        tempport4 = light.Lights.port
-        light_4.dayOfWeek = [0, new schedule.Range(0, 6)];
-        light_4.hour = parseInt(light.Lights.ontimehr)
-        light_4.minute = parseInt(light.Lights.ontimemin)
+        }).exec(),
 
-        light4on.reschedule(light_4, function(){
-            dolights(1,tempport4)
-        });
-        light_4.dayOfWeek = [0, new schedule.Range(0, 6)];
-        light_4.hour = parseInt(light.Lights.offtimehr)
-        light_4.minute = parseInt(light.Lights.offtimemin)
-        light4off.reschedule(light_4, function(){
-            dolights(0,tempport4)
-        })
+        Light.findOne({ 'Lights.id' :  'Lights 4' }, function(err, light) {
+            if (err) {
+                console.log(err);
+                return;
+            }
 
-    });
+            // if no user is found, return the message
+            if (!light)
+                return;
+            console.log("found lihgts 4")
+            tempport4 = light.Lights.port
+            light_4.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_4.hour = parseInt(light.Lights.ontimehr)
+            light_4.minute = parseInt(light.Lights.ontimemin)
+
+            light4on.reschedule(light_4, function(){
+                dolights(1,tempport4)
+            });
+            light_4.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_4.hour = parseInt(light.Lights.offtimehr)
+            light_4.minute = parseInt(light.Lights.offtimemin)
+            light4off.reschedule(light_4, function(){
+                dolights(0,tempport4)
+            })
+
+        }).exec()
+
+    ];
+
+
 
 }
 light_1.dayOfWeek = [0, new schedule.Range(0, 6)];

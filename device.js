@@ -89,6 +89,7 @@ mqtt_client.on('message', function (topic, message) {
                 light.save(function (err) {
                     if (err)
                         throw err;
+                    
                     updatetimes()
                     return;
                 });
@@ -110,18 +111,21 @@ function dolights(state,id){
         'content-type': 'text/plain',
         'accepT': '*/*'
     }
+    switch(id){
+        case "Light 1":
+            port = tempport1;
+            break;
+        case "Light 2":
+            port = tempport2;
+            break;
+        case "Light 3":
+            port = tempport3;
+            break;
+        case "Light 4":
+            port = tempport4;
+            break;
 
-    Light.findOne({ 'Lights.id' :  id }, function(err, light) {
-        if (err)
-            return ;
-
-        // if no user is found, return the message
-        if (!light)
-            return;
-
-            port = light.Lights.port
-
-
+    }
             switch (port) {
                 case "1" :
                     portsend = '1000000000000000'
@@ -220,7 +224,7 @@ function dolights(state,id){
                 }
             })
 
-    });
+
 
 
 }

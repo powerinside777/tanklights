@@ -11,6 +11,10 @@ var tempport1 =""
 var tempport2 =""
 var tempport3 =""
 var tempport4=""
+var lights_1_state =false;
+var lights_2_state =false;
+var lights_3_state =false;
+var lights_4_state =false;
 var Light       		= require('./models/lights');
 var db = mongoose.connection;
 mongoose.Promise = require('q').Promise
@@ -103,6 +107,56 @@ mqtt_client.on('message', function (topic, message) {
         }
     }
 });
+setInterval(function(){
+    var headers = {
+        'Authorization': 'Basic c25tcDoxMjM0',
+        'content-type': 'text/plain',
+        'accepT': '*/*'
+    }
+    var options = {
+        url: 'http://10.0.0.158:80/status.xml',
+        method: 'GET',
+        headers: headers
+    }
+    request(options, function (err, res, body) {
+        if (err) {
+            console.dir(err)
+            return
+        }
+        console.dir('headers', res.headers)
+        console.dir('status code', res.statusCode)
+        console.dir(body)
+        var arr = body.split(",");
+        var l1 = parseInt(tempport1) + 9;
+        var l2 = parseInt(tempport2) + 9;
+        var l3 = parseInt(tempport3) + 9;
+        var l4 = parseInt(tempport4) + 9;
+console.log(arr[l2])
+
+        if(arr[l1] == '0' && lights_1_state == true)
+            dolights(1,'Lights 1')
+        else if (arr[l1] == '1' && lights_1_state == false)
+            dolights(0,'Lights 1')
+
+        if(arr[l2] == '0' && lights_2_state == true)
+            dolights(1,'Lights 2')
+        else if (arr[l2] == '1' && lights_2_state == false)
+            dolights(0,'Lights 2')
+
+        if(arr[l3] == '0' && lights_3_state == true)
+            dolights(1,'Lights 3')
+        else if (arr[l3] == '1' && lights_3_state == false)
+            dolights(0,'Lights 3')
+
+        if(arr[l4] == '0' && lights_4_state == true)
+            dolights(1,'Lights 4')
+        else if (arr[l4] == '1' && lights_4_state == false)
+            dolights(0,'Lights 4')
+
+
+    })
+
+},2000000)
 function dolights(state,id){
     var portsend;
     var port;
@@ -232,8 +286,7 @@ if(port !="") {
 
 
 }
-
-
+1
 function updatetimes(){
     var promises = [
 
@@ -255,13 +308,15 @@ function updatetimes(){
         light_1.minute = parseInt(light.Lights.ontimemin)
 
         light1on.reschedule(light_1, function(){
-            dolights(1,tempport1)
+            dolights(1,'Lights 1')
+            lights_1_state = true;
         });
         light_1.dayOfWeek = [0, new schedule.Range(0, 6)];
         light_1.hour = parseInt(light.Lights.offtimehr)
         light_1.minute = parseInt(light.Lights.offtimemin)
         light1off.reschedule(light_1, function(){
-            dolights(0,tempport1)
+            dolights(0,'Lights 1')
+            lights_1_state = false;
         })
 
     }).exec(),
@@ -284,13 +339,15 @@ function updatetimes(){
             light_2.minute = parseInt(light.Lights.ontimemin)
 
             light2on.reschedule(light_2, function(){
-                dolights(1,tempport2)
+                dolights(1,'Lights 2')
+                lights_2_state = true;
             });
             light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
             light_2.hour = parseInt(light.Lights.offtimehr)
             light_2.minute = parseInt(light.Lights.offtimemin)
             light2off.reschedule(light_2, function(){
-                dolights(0,tempport2)
+                dolights(0,'Lights 2')
+                lights_2_state = false;
             })
 
         }).exec(),
@@ -310,13 +367,15 @@ function updatetimes(){
             light_3.minute = parseInt(light.Lights.ontimemin)
 
             light3on.reschedule(light_3, function(){
-                dolights(1,tempport3)
+                dolights(1,'Lights 3')
+                lights_3_state = true;
             });
             light_3.dayOfWeek = [0, new schedule.Range(0, 6)];
             light_3.hour = parseInt(light.Lights.offtimehr)
             light_3.minute = parseInt(light.Lights.offtimemin)
             light3off.reschedule(light_3, function(){
-                dolights(0,tempport3)
+                dolights(0,'Lights 3')
+                lights_3_state = false;
             })
 
         }).exec(),
@@ -337,13 +396,15 @@ function updatetimes(){
             light_4.minute = parseInt(light.Lights.ontimemin)
 
             light4on.reschedule(light_4, function(){
-                dolights(1,tempport4)
+                dolights(1,'Lights 4')
+                lights_4_state = true;
             });
             light_4.dayOfWeek = [0, new schedule.Range(0, 6)];
             light_4.hour = parseInt(light.Lights.offtimehr)
             light_4.minute = parseInt(light.Lights.offtimemin)
             light4off.reschedule(light_4, function(){
-                dolights(0,tempport4)
+                dolights(0,'Lights 4')
+                lights_4_state = false;
             })
 
         }).exec()
@@ -360,27 +421,19 @@ light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
 light_2.hour =19
 light_2.minute =0
 var light1on = schedule.scheduleJob(light_1, function(){
-    dolights(1,'Lights 1')
 });
 
 var light1off = schedule.scheduleJob(light_2, function(){
-    dolights(0,'Lights 1')
 });
 var light2on = schedule.scheduleJob(light_1, function(){
-    dolights(1,'Lights 2')
 });
 var light2off = schedule.scheduleJob(light_2, function(){
-    dolights(0,'Lights 2')
 });
 var light3on = schedule.scheduleJob(light_1, function(){
-    dolights(1,'Lights 3')
 });
 var light3off = schedule.scheduleJob(light_2, function(){
-    dolights(0,'Lights 3')
 });
 var light4on = schedule.scheduleJob(light_1, function(){
-    dolights(1,'Lights 4')
 });
 var light4off = schedule.scheduleJob(light_2, function(){
-    dolights(0,'Lights 4')
 });

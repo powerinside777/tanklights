@@ -310,6 +310,7 @@ function updatetimes(){
         light1on.reschedule(light_1, function(){
             dolights(1,'Lights 1')
             lights_1_state = true;
+            console.log("ra code from updatetime Light 1 on ")
         });
         light_1.dayOfWeek = [0, new schedule.Range(0, 6)];
         light_1.hour = parseInt(light.Lights.offtimehr)
@@ -317,6 +318,7 @@ function updatetimes(){
         light1off.reschedule(light_1, function(){
             dolights(0,'Lights 1')
             lights_1_state = false;
+            console.log("ra code from updatetime Light 1 off ")
         })
 
     }).exec(),
@@ -341,6 +343,7 @@ function updatetimes(){
             light2on.reschedule(light_2, function(){
                 dolights(1,'Lights 2')
                 lights_2_state = true;
+                console.log("ra code from updatetime Light 2 on ")
             });
             light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
             light_2.hour = parseInt(light.Lights.offtimehr)
@@ -348,6 +351,7 @@ function updatetimes(){
             light2off.reschedule(light_2, function(){
                 dolights(0,'Lights 2')
                 lights_2_state = false;
+                console.log("ra code from updatetime Light 2 off ")
             })
 
         }).exec(),
@@ -369,6 +373,7 @@ function updatetimes(){
             light3on.reschedule(light_3, function(){
                 dolights(1,'Lights 3')
                 lights_3_state = true;
+                console.log("ra code from updatetime Light 3 on ")
             });
             light_3.dayOfWeek = [0, new schedule.Range(0, 6)];
             light_3.hour = parseInt(light.Lights.offtimehr)
@@ -376,6 +381,7 @@ function updatetimes(){
             light3off.reschedule(light_3, function(){
                 dolights(0,'Lights 3')
                 lights_3_state = false;
+                console.log("ra code from updatetime Light 3 off ")
             })
 
         }).exec(),
@@ -398,6 +404,7 @@ function updatetimes(){
             light4on.reschedule(light_4, function(){
                 dolights(1,'Lights 4')
                 lights_4_state = true;
+                console.log("ra code from updatetime Light 4 on ")
             });
             light_4.dayOfWeek = [0, new schedule.Range(0, 6)];
             light_4.hour = parseInt(light.Lights.offtimehr)
@@ -405,6 +412,7 @@ function updatetimes(){
             light4off.reschedule(light_4, function(){
                 dolights(0,'Lights 4')
                 lights_4_state = false;
+                console.log("ra code from updatetime Light 4 off ")
             })
 
         }).exec()
@@ -421,19 +429,44 @@ light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
 light_2.hour =19
 light_2.minute =0
 var light1on = schedule.scheduleJob(light_1, function(){
+    dolights(0,'Lights 1')
+    lights_1_state = true;
+    console.log("ra code from main Light 1 on ")
+
 });
 
 var light1off = schedule.scheduleJob(light_2, function(){
+    dolights(0,'Lights 1')
+    lights_1_state = false;
+    console.log("ra code from updatetime Light 1 off ")
 });
 var light2on = schedule.scheduleJob(light_1, function(){
+    dolights(1,'Lights 2')
+    lights_2_state = true;
+    console.log("ra code from main Light 2 on ")
 });
 var light2off = schedule.scheduleJob(light_2, function(){
+    dolights(0,'Lights 2')
+    lights_2_state = false;
+    console.log("ra code from main Light 2 off ")
 });
 var light3on = schedule.scheduleJob(light_1, function(){
+    dolights(1,'Lights 3')
+    lights_3_state = true;
+    console.log("ra code from main Light 3 on ")
 });
 var light3off = schedule.scheduleJob(light_2, function(){
+    dolights(0,'Lights 3')
+    lights_3_state = false;
+    console.log("ra code from main Light 3 off ")
 });
 var light4on = schedule.scheduleJob(light_1, function(){
+    dolights(1,'Lights 4')
+    lights_4_state = true;
+    console.log("ra code from main Light 4 on ")
 });
 var light4off = schedule.scheduleJob(light_2, function(){
+    dolights(0,'Lights 4')
+    lights_4_state = false;
+    console.log("ra code from main Light 4 off ")
 });

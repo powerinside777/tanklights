@@ -64,12 +64,16 @@ mqtt_client.on('connect', function () {
     mqtt_client.subscribe('home/fish/lights');
     console.log('MQTT:','connected');
 });
-var light_1 = new schedule.RecurrenceRule();
-var light_2 = new schedule.RecurrenceRule();
-var light_3 = new schedule.RecurrenceRule();
-var light_4 = new schedule.RecurrenceRule();
-var light_5 = new schedule.RecurrenceRule();
-
+var light_1_on = new schedule.RecurrenceRule();
+var light_1_off = new schedule.RecurrenceRule();
+var light_2_on = new schedule.RecurrenceRule();
+var light_2_off = new schedule.RecurrenceRule();
+var light_3_on = new schedule.RecurrenceRule();
+var light_3_off = new schedule.RecurrenceRule();
+var light_4_on = new schedule.RecurrenceRule();
+var light_4_off = new schedule.RecurrenceRule();
+var light_5_on = new schedule.RecurrenceRule();
+var light_5_off = new schedule.RecurrenceRule();
 mqtt_client.on('message', function (topic, message) {
     console.log('MQTT:'+topic+':'+message.toString());
     if(topic == 'home/fish/lights') {
@@ -165,7 +169,7 @@ function dolights(state,id){
         'content-type': 'text/plain',
         'accepT': '*/*'
     }
-    console.log(tempport2)
+
     switch(id){
         case "Lights 1":
             port = tempport1;
@@ -277,7 +281,7 @@ if(port !="") {
         console.dir(body)
         if (body == "Success!") {
             mqtt_client.publish("home", id + '=' + state);
-
+            console.log(id+"="+state)
         }
     })
 }
@@ -301,21 +305,22 @@ function updatetimes(){
         if (!light)
             return;
 
-        console.log("found lihgts 1")
-        tempport1 = light.Lights.port
-        light_1.dayOfWeek = [0, new schedule.Range(0, 6)];
-        light_1.hour = parseInt(light.Lights.ontimehr)
-        light_1.minute = parseInt(light.Lights.ontimemin)
+        console.log("found lihgts 1 " +light.Lights.ontimehr +":"+light.Lights.ontimemin +"off" +light.Lights.offtimehr+ ":"+light.Lights.offtimemin)
 
-        light1on.reschedule(light_1, function(){
+        tempport1 = light.Lights.port
+        light_1_on.dayOfWeek = [0, new schedule.Range(0, 6)];
+        light_1_on.hour = parseInt(light.Lights.ontimehr)
+        light_1_on.minute = parseInt(light.Lights.ontimemin)
+
+        light1on.reschedule(light_1_on, function(){
             dolights(1,'Lights 1')
             lights_1_state = true;
             console.log("ra code from updatetime Light 1 on ")
         });
-        light_1.dayOfWeek = [0, new schedule.Range(0, 6)];
-        light_1.hour = parseInt(light.Lights.offtimehr)
-        light_1.minute = parseInt(light.Lights.offtimemin)
-        light1off.reschedule(light_1, function(){
+        light_1_off.dayOfWeek = [0, new schedule.Range(0, 6)];
+        light_1_off.hour = parseInt(light.Lights.offtimehr)
+        light_1_off.minute = parseInt(light.Lights.offtimemin)
+        light1off.reschedule(light_1_off, function(){
             dolights(0,'Lights 1')
             lights_1_state = false;
             console.log("ra code from updatetime Light 1 off ")
@@ -334,21 +339,22 @@ function updatetimes(){
             if (!light)
                 return;
 
-            console.log("found lihgts 2")
-            tempport2 = light.Lights.port
-            light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
-            light_2.hour = parseInt(light.Lights.ontimehr)
-            light_2.minute = parseInt(light.Lights.ontimemin)
+            console.log("found lihgts 2 " +light.Lights.ontimehr +":"+light.Lights.ontimemin +"off" +light.Lights.offtimehr+ ":"+light.Lights.offtimemin)
 
-            light2on.reschedule(light_2, function(){
+            tempport2 = light.Lights.port
+            light_2_on.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_2_on.hour = parseInt(light.Lights.ontimehr)
+            light_2_on.minute = parseInt(light.Lights.ontimemin)
+
+            light2on.reschedule(light_2_on, function(){
                 dolights(1,'Lights 2')
                 lights_2_state = true;
                 console.log("ra code from updatetime Light 2 on ")
             });
-            light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
-            light_2.hour = parseInt(light.Lights.offtimehr)
-            light_2.minute = parseInt(light.Lights.offtimemin)
-            light2off.reschedule(light_2, function(){
+            light_2_off.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_2_off.hour = parseInt(light.Lights.offtimehr)
+            light_2_off.minute = parseInt(light.Lights.offtimemin)
+            light2off.reschedule(light_2_off, function(){
                 dolights(0,'Lights 2')
                 lights_2_state = false;
                 console.log("ra code from updatetime Light 2 off ")
@@ -364,21 +370,22 @@ function updatetimes(){
             // if no user is found, return the message
             if (!light)
                 return;
-            console.log("found lihgts 3")
-            tempport3 = light.Lights.port
-            light_3.dayOfWeek = [0, new schedule.Range(0, 6)];
-            light_3.hour = parseInt(light.Lights.ontimehr)
-            light_3.minute = parseInt(light.Lights.ontimemin)
+            console.log("found lihgts 3 " +light.Lights.ontimehr +":"+light.Lights.ontimemin +"off" +light.Lights.offtimehr+ ":"+light.Lights.offtimemin)
 
-            light3on.reschedule(light_3, function(){
+            tempport3 = light.Lights.port
+            light_3_on.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_3_on.hour = parseInt(light.Lights.ontimehr)
+            light_3_on.minute = parseInt(light.Lights.ontimemin)
+
+            light3on.reschedule(light_3_on, function(){
                 dolights(1,'Lights 3')
                 lights_3_state = true;
                 console.log("ra code from updatetime Light 3 on ")
             });
-            light_3.dayOfWeek = [0, new schedule.Range(0, 6)];
-            light_3.hour = parseInt(light.Lights.offtimehr)
-            light_3.minute = parseInt(light.Lights.offtimemin)
-            light3off.reschedule(light_3, function(){
+            light_3_off.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_3_off.hour = parseInt(light.Lights.offtimehr)
+            light_3_off.minute = parseInt(light.Lights.offtimemin)
+            light3off.reschedule(light_3_off, function(){
                 dolights(0,'Lights 3')
                 lights_3_state = false;
                 console.log("ra code from updatetime Light 3 off ")
@@ -394,22 +401,22 @@ function updatetimes(){
 
             // if no user is found, return the message
             if (!light)
-                return;
-            console.log("found lihgts 4")
+                return; +
+                console.log("found lihgts 4 " +light.Lights.ontimehr +":"+light.Lights.ontimemin +"off" +light.Lights.offtimehr+ ":"+light.Lights.offtimemin)
             tempport4 = light.Lights.port
-            light_4.dayOfWeek = [0, new schedule.Range(0, 6)];
-            light_4.hour = parseInt(light.Lights.ontimehr)
-            light_4.minute = parseInt(light.Lights.ontimemin)
+            light_4_on.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_4_on.hour = parseInt(light.Lights.ontimehr)
+            light_4_on.minute = parseInt(light.Lights.ontimemin)
 
-            light4on.reschedule(light_4, function(){
+            light4on.reschedule(light_4_on, function(){
                 dolights(1,'Lights 4')
                 lights_4_state = true;
                 console.log("ra code from updatetime Light 4 on ")
             });
-            light_4.dayOfWeek = [0, new schedule.Range(0, 6)];
-            light_4.hour = parseInt(light.Lights.offtimehr)
-            light_4.minute = parseInt(light.Lights.offtimemin)
-            light4off.reschedule(light_4, function(){
+            light_4_off.dayOfWeek = [0, new schedule.Range(0, 6)];
+            light_4_off.hour = parseInt(light.Lights.offtimehr)
+            light_4_off.minute = parseInt(light.Lights.offtimemin)
+            light4off.reschedule(light_4_off, function(){
                 dolights(0,'Lights 4')
                 lights_4_state = false;
                 console.log("ra code from updatetime Light 4 off ")
@@ -422,50 +429,45 @@ function updatetimes(){
 
 
 }
-light_1.dayOfWeek = [0, new schedule.Range(0, 6)];
-light_1.hour =7
-light_1.minute =0
-light_2.dayOfWeek = [0, new schedule.Range(0, 6)];
-light_2.hour =19
-light_2.minute =0
-var light1on = schedule.scheduleJob(light_1, function(){
+
+var light1on = schedule.scheduleJob(light_1_on, function(){
     dolights(0,'Lights 1')
     lights_1_state = true;
     console.log("ra code from main Light 1 on ")
 
 });
 
-var light1off = schedule.scheduleJob(light_2, function(){
+var light1off = schedule.scheduleJob(light_1_off, function(){
     dolights(0,'Lights 1')
     lights_1_state = false;
     console.log("ra code from updatetime Light 1 off ")
 });
-var light2on = schedule.scheduleJob(light_1, function(){
+var light2on = schedule.scheduleJob(light_2_on, function(){
     dolights(1,'Lights 2')
     lights_2_state = true;
     console.log("ra code from main Light 2 on ")
 });
-var light2off = schedule.scheduleJob(light_2, function(){
+var light2off = schedule.scheduleJob(light_2_off, function(){
     dolights(0,'Lights 2')
     lights_2_state = false;
     console.log("ra code from main Light 2 off ")
 });
-var light3on = schedule.scheduleJob(light_1, function(){
+var light3on = schedule.scheduleJob(light_3_on, function(){
     dolights(1,'Lights 3')
     lights_3_state = true;
     console.log("ra code from main Light 3 on ")
 });
-var light3off = schedule.scheduleJob(light_2, function(){
+var light3off = schedule.scheduleJob(light_3_off, function(){
     dolights(0,'Lights 3')
     lights_3_state = false;
     console.log("ra code from main Light 3 off ")
 });
-var light4on = schedule.scheduleJob(light_1, function(){
+var light4on = schedule.scheduleJob(light_4_on, function(){
     dolights(1,'Lights 4')
     lights_4_state = true;
     console.log("ra code from main Light 4 on ")
 });
-var light4off = schedule.scheduleJob(light_2, function(){
+var light4off = schedule.scheduleJob(light_4_off, function(){
     dolights(0,'Lights 4')
     lights_4_state = false;
     console.log("ra code from main Light 4 off ")

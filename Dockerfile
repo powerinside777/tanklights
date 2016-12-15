@@ -1,4 +1,4 @@
-FROM node:6.3-onbuild
+FROM hypriot/rpi-node:latest
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 

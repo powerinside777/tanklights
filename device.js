@@ -34,25 +34,27 @@ db.on('error', function(error) {
     mongoose.disconnect();
 });
 db.on('disconnected', function() {
-    console.log('MongoDB disconnected!');
-    var now = new Date().getTime();
-    // check if the last reconnection attempt was too early
-    if (lastReconnectAttempt && now-lastReconnectAttempt<5000) {
-        // if it does, delay the next attempt
-        var delay = 5000-(now-lastReconnectAttempt);
-        console.log('reconnecting to MongoDB in ' + delay + "mills");
-        setTimeout(function() {
-            console.log('reconnecting to MongoDB');
-            lastReconnectAttempt=new Date().getTime();
-            mongoose.connect(configDB.url, {server:{auto_reconnect:true}});
-        },delay);
-    }
-    else {
-        console.log('reconnecting to MongoDB');
-        lastReconnectAttempt=now;
-        mongoose.connect(configDB.url, {server:{auto_reconnect:true}});
-    }
+    setTimeout(function() {
+        console.log('MongoDB disconnected!');
+        var now = new Date().getTime();
+        // check if the last reconnection attempt was too early
 
+        if (lastReconnectAttempt && now - lastReconnectAttempt < 5000) {
+            // if it does, delay the next attempt
+            var delay = 5000 - (now - lastReconnectAttempt);
+            console.log('reconnecting to MongoDB in ' + delay + "mills");
+            setTimeout(function () {
+                console.log('reconnecting to MongoDB');
+                lastReconnectAttempt = new Date().getTime();
+                mongoose.connect(configDB.url, {server: {auto_reconnect: true}});
+            }, delay);
+        }
+        else {
+            console.log('reconnecting to MongoDB');
+            lastReconnectAttempt = now;
+            mongoose.connect(configDB.url, {server: {auto_reconnect: true}});
+        }
+    },60000)
 });
 db.on('connected', function() {
     updatetimes();
@@ -127,15 +129,14 @@ setInterval(function(){
             console.dir(err)
             return
         }
-        console.dir('headers', res.headers)
-        console.dir('status code', res.statusCode)
+
         console.dir(body)
         var arr = body.split(",");
         var l1 = parseInt(tempport1) + 9;
         var l2 = parseInt(tempport2) + 9;
         var l3 = parseInt(tempport3) + 9;
         var l4 = parseInt(tempport4) + 9;
-console.log(arr[l2])
+        console.log(arr[l2])
 
         if(arr[l1] == '0' && lights_1_state == true)
             dolights(1,'Lights 1')

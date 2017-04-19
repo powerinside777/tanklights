@@ -11,7 +11,8 @@ var fishtanklights = mongoose.Schema({
         ontimehr        : String,
         ontimemin        : String,
         offtimehr     : String,
-        offtimemin     : String
+        offtimemin     : String,
+        currentstate     : Boolean
     }
 
 
